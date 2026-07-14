@@ -43,15 +43,40 @@
     </div>
   </div>
   <div class="header-right">
-    <a class="btn btn-secondary" href="https://opengrounds.github.io/"><span class="long">←&nbsp;</span>all projects</a>
+    <button class="btn btn-home" onclick="goHome()">🏠 blog home</button>
+    <a class="btn btn-secondary" href="https://opengrounds.github.io/"><span class="long">all projects&nbsp;</span>↗</a>
   </div>
 </header>
+
+<!-- fills in as you scroll through a post; stays empty on the list view -->
+<div id="reading-progress"></div>
 
 <main id="main">
 
 <!-- LIST VIEW -->
 <div id="view-list">
   <div class="hero">
+    <!-- purely decorative — described in styles.css, not read by screen readers -->
+    <div class="hero-doodles" aria-hidden="true">
+      <svg class="doodle doodle-1" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="12" fill="none" stroke="var(--sky)" stroke-width="3.5"/>
+      </svg>
+      <svg class="doodle doodle-2" viewBox="0 0 20 40" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 2 C2 9, 18 16, 10 23 C2 30, 18 34, 10 38"
+              fill="none" stroke="var(--sun)" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <svg class="doodle doodle-3" viewBox="0 0 40 20" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 10 C9 2, 16 18, 23 10 C30 2, 34 14, 38 10"
+              fill="none" stroke="var(--pink)" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <svg class="doodle doodle-4" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="9" fill="none" stroke="var(--grass)" stroke-width="3.5"/>
+      </svg>
+      <svg class="doodle doodle-5" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="6" fill="var(--flame)"/>
+      </svg>
+    </div>
+
     <h1>updates <span class="ital">&amp;</span> stories<br>from the commons</h1>
     <p>news, dispatches, and longer-form writing from open:grounds.</p>
     <div class="hero-meta" id="hero-meta"></div>
@@ -69,8 +94,11 @@
 <!-- FULL POST VIEW — its own page, reached via #post/<id> -->
 <div id="view-post">
   <div class="post-page">
-    <span class="post-back" onclick="goHome()" role="button" tabindex="0"
-          onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goHome();}">← all posts</span>
+    <div class="post-page-topbar">
+      <span class="post-back" onclick="goHome()" role="button" tabindex="0"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();goHome();}">← all posts</span>
+      <button class="copy-link-btn" onclick="copyPostLink()">🔗 copy link</button>
+    </div>
     <div class="post-page-accent" id="post-accent"></div>
     <div class="post-page-date" id="post-date"></div>
     <h1 class="post-page-title" id="post-title"></h1>
@@ -81,6 +109,8 @@
 </main>
 
 <button id="back-to-top" aria-label="back to top" onclick="scrollToTop()">↑</button>
+
+<div id="toast"></div>
 
 <footer>
   made with love in davis, ca &middot; <a href="https://opengrounds.github.io/">open:grounds</a>

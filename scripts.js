@@ -212,6 +212,7 @@ function showList() {
   document.querySelector('#view-post').style.display = 'none';
   document.querySelector('#view-list').style.display = 'block';
   document.title = DEFAULT_TITLE;
+  document.querySelector('#reading-progress').style.width = '0%';
   window.scrollTo(0, 0);
 }
 
@@ -378,9 +379,85 @@ function scrollToTop() {
 }
 
 // Show the button once you've scrolled a bit, hide it near the top.
+// This same scroll listener also drives the reading progress bar below.
 window.addEventListener('scroll', function () {
   document.querySelector('#back-to-top').classList.toggle('show', window.scrollY > 400);
+  updateReadingProgress();
 });
+
+/* ---------------- reading progress bar ---------------- */
+// Fills in as you scroll down a post, so there's a visible sense of
+// "almost there" while reading. Stays at 0 on the list view.
+
+function updateReadingProgress() {
+  var progressBar = document.querySelector('#reading-progress');
+  var postView = document.querySelector('#view-post');
+
+  if (postView.style.display !== 'block') {
+    progressBar.style.width = '0%';
+    return;
+  }
+
+  var scrolled = window.scrollY;
+  var scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var percent = scrollableHeight > 0 ? (scrolled / scrollableHeight) * 100 : 0;
+  progressBar.style.width = percent + '%';
+}
+
+/* ---------------- copy link button + toast ---------------- */
+
+// How long a toast stays on screen before fading out, in milliseconds.
+var TOAST_DURATION = 2200;
+
+// Keeps track of the current "hide the toast" timer, so if two toasts
+// fire close together the first one doesn't cut the second one short.
+var toastHideTimer = null;
+
+function copyPostLink() {
+  var url = window.location.href;
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function () {
+      showToast('link copied ✓');
+    }).catch(function () {
+      copyLinkFallback(url);
+    });
+  } else {
+    // older browsers without the Clipboard API
+    copyLinkFallback(url);
+  }
+}
+
+// Copies text using a hidden textarea + the old document.execCommand
+// approach, for browsers that don't support navigator.clipboard.
+function copyLinkFallback(text) {
+  var tempInput = document.createElement('textarea');
+  tempInput.value = text;
+  tempInput.style.position = 'fixed';
+  tempInput.style.left = '-9999px';
+  document.body.appendChild(tempInput);
+  tempInput.select();
+
+  try {
+    document.execCommand('copy');
+    showToast('link copied ✓');
+  } catch (error) {
+    showToast('could not copy — grab it from the address bar');
+  }
+
+  document.body.removeChild(tempInput);
+}
+
+function showToast(message) {
+  var toast = document.querySelector('#toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  window.clearTimeout(toastHideTimer);
+  toastHideTimer = window.setTimeout(function () {
+    toast.classList.remove('show');
+  }, TOAST_DURATION);
+}
 
 /* ---------------- go ---------------- */
 

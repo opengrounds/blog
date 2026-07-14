@@ -23,7 +23,11 @@
 }
 
 html, body {
-  background: var(--paper);
+  background-color: var(--paper);
+  /* faint dot grid so the paper background isn't completely flat —
+     subtle enough to stay out of the way of reading */
+  background-image: radial-gradient(rgba(21, 19, 15, 0.07) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
   color: var(--ink);
   font-family: 'Space Mono', monospace;
   font-size: 16px;
@@ -127,16 +131,30 @@ header {
 .btn-secondary { border-width: 2px; font-size: 0.73rem; color: var(--stone); border-color: rgba(21,19,15,0.3); }
 .btn-secondary:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
+/* "blog home" — deliberately louder than "all projects" next to it.
+   One stays inside the blog (this one), the other leaves the site
+   entirely, so they shouldn't read as interchangeable. */
+.btn-home {
+  background: var(--flame);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.btn-home:hover { background: var(--ink); }
+
 /* ============================================================
    HERO
    ============================================================ */
 .hero {
+  position: relative;
+  overflow: hidden;
   max-width: 760px;
   margin: 0 auto;
   padding: 3.2rem 1.5rem 1.5rem;
   text-align: center;
 }
 .hero h1 {
+  position: relative;
+  z-index: 1;
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   font-size: clamp(1.8rem, 5vw, 2.6rem);
@@ -145,13 +163,57 @@ header {
 }
 .hero h1 .ital { font-weight: 100; font-style: italic; color: var(--pink); }
 .hero p {
+  position: relative;
+  z-index: 1;
   color: var(--stone);
   font-size: 0.85rem;
   margin-top: 0.75rem;
   letter-spacing: 0.01em;
 }
 
+/* ---- decorative doodles scattered around the hero ----
+   Purely visual — sit behind the text (z-index 0 vs the text's 1)
+   and don't intercept clicks, so they never get in the way. */
+.hero-doodles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.doodle {
+  position: absolute;
+  opacity: 0.9;
+}
+.doodle-1 { top: 6%;  left: 5%;  width: 34px; }
+.doodle-2 { top: 12%; right: 7%; width: 26px; }
+.doodle-3 { bottom: 8%; left: 10%; width: 24px; }
+.doodle-4 { bottom: 14%; right: 12%; width: 30px; }
+.doodle-5 { top: 42%; left: 1%; width: 20px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .doodle-1 { animation: doodleFloat 5.5s ease-in-out infinite; }
+  .doodle-2 { animation: doodleFloatAlt 6.5s ease-in-out infinite 0.4s; }
+  .doodle-3 { animation: doodleFloatAlt 4.8s ease-in-out infinite 0.9s; }
+  .doodle-4 { animation: doodleFloat 6s ease-in-out infinite 0.2s; }
+  .doodle-5 { animation: doodleFloatAlt 5.2s ease-in-out infinite 0.6s; }
+}
+@keyframes doodleFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-9px) rotate(7deg); }
+}
+@keyframes doodleFloatAlt {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(8px) rotate(-8deg); }
+}
+
+/* the two furthest-out doodles get crowded on narrow screens — hide them there */
+@media (max-width: 560px) {
+  .doodle-2, .doodle-5 { display: none; }
+}
+
 .hero-meta {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -324,7 +386,6 @@ header {
   font-weight: 700;
   font-size: 0.75rem;
   letter-spacing: 0.03em;
-  margin-bottom: 1.5rem;
   cursor: pointer;
   color: var(--stone);
 }
@@ -366,8 +427,36 @@ header {
 }
 .post-body ul { margin: 0 0 1.1rem 1.3rem; }
 .post-body li { margin-bottom: 0.4rem; font-size: 0.98rem; }
-.post-body a { color: var(--sky); text-decoration-color: var(--sky); }
 .post-body strong { font-weight: 700; }
+
+/* links inside a post — a highlighter-style sweep instead of the
+   plain default blue/visited-purple browsers give you for free.
+   The fill grows from the left on hover/focus; color and text
+   stay the same for visited links, no dull purple. */
+.post-body a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 3px solid var(--flame);
+  background-image: linear-gradient(var(--flame), var(--flame));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 100%;
+  padding: 0 0.05em;
+  transition: background-size 0.25s ease, color 0.25s ease;
+}
+.post-body a:visited { color: var(--ink); }
+.post-body a:hover,
+.post-body a:focus-visible {
+  background-size: 100% 100%;
+  color: var(--paper);
+}
+/* a little arrow on links that open in a new tab, so it's obvious
+   before you click */
+.post-body a[target="_blank"]::after {
+  content: ' ↗';
+  font-weight: 700;
+}
 
 /* photos embedded in a post, via ![caption](url) on its own line */
 .post-body figure {
@@ -399,7 +488,8 @@ footer {
   font-size: 0.7rem;
   color: var(--stone);
 }
-footer a { color: var(--flame); }
+footer a { color: var(--flame); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 2px; transition: color 0.15s; }
+footer a:hover, footer a:focus-visible { color: var(--sky); }
 
 @media (max-width: 560px) {
   .header-right .btn-secondary span.long { display: none; }
@@ -427,3 +517,61 @@ footer a { color: var(--flame); }
 #back-to-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
 #back-to-top:hover { background: var(--ink); }
 #back-to-top:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+
+/* ---- reading progress bar — fills in as you scroll through a post ---- */
+#reading-progress {
+  position: fixed;
+  top: 64px; /* sits right under the sticky header */
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: var(--flame);
+  z-index: 25;
+  transition: width 0.1s linear;
+}
+
+/* ---- post page top bar: back link + copy link button, side by side ---- */
+.post-page-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+.copy-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s, transform 0.08s;
+}
+.copy-link-btn:hover { background: var(--ink); color: var(--paper); }
+.copy-link-btn:active { transform: translate(1px, 1px); }
+
+/* ---- toast — little confirmation that pops up bottom-center ---- */
+#toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.7rem 1.2rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.78rem;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--flame);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 200;
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
