@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>opengrounds blog / updates &amp; stories from the commons</title>
+
+<!-- favicon — same mark as the rest of open:grounds -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 90 90'><rect width='90' height='90' fill='%23FF5722'/><path d='M14 44 C12 26, 24 12, 43 13 C57 14, 70 9, 76 23 C82 37, 78 57, 69 65 C61 74, 44 80, 31 76 C18 72, 10 65, 14 44 Z' fill='%23F7F4EC'/><path d='M30 14 C35 35, 38 55, 42 76' fill='none' stroke='%23FF5722' stroke-width='3.5' stroke-linecap='round'/><path d='M12 50 C30 46, 55 44, 78 46' fill='none' stroke='%23FF5722' stroke-width='3.5' stroke-linecap='round'/><circle cx='57' cy='36' r='10' fill='%232F9BD6'/><circle cx='57' cy='36' r='4' fill='%23F7F4EC'/><line x1='57' y1='46' x2='57' y2='56' stroke='%232F9BD6' stroke-width='3' stroke-linecap='round'/></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:      #F7F4EC;
+  --paper-dim:  #ECE6D9;
+  --ink:        #15130F;
+  --pink:       #FF3E86;
+  --sky:        #2F9BD6;
+  --sky-tint:   #DDF1FA;
+  --grass:      #2F4D22;
+  --grass-tint: #E6EEDF;
+  --flame:      #FF5722;
+  --flame-tint: #ECE6D9;
+  --sun:        #FFC53D;
+  --stone:      #75695A;
+  --border: 3px solid var(--ink);
+}
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: inherit; }
+
+/* ============================================================
+   HEADER — mirrors the davis commons header
+   ============================================================ */
+header {
+  border-bottom: var(--border);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--paper);
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 0.9rem; cursor: pointer; }
+.brand-mark { width: 46px; height: 46px; flex-shrink: 0; }
+.brand-mark svg { width: 100%; height: 100%; display: block; }
+.wordmark { display: flex; flex-direction: column; gap: 0.14rem; }
+.brand-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.brand-title .punct { font-weight: 100; color: var(--flame); }
+.brand-title .ital  { font-weight: 100; font-style: italic; color: var(--pink); }
+.brand-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.13em;
+  color: var(--stone);
+  text-transform: uppercase;
+}
+.header-right { margin-left: auto; display: flex; gap: 0.6rem; }
+
+.btn {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1rem;
+  border: var(--border);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.1s, color 0.1s;
+  white-space: nowrap;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.btn:hover  { background: var(--ink); color: var(--paper); }
+.btn:active { transform: translate(2px, 2px); }
+.btn-secondary { border-width: 2px; font-size: 0.73rem; color: var(--stone); border-color: rgba(21,19,15,0.3); }
+.btn-secondary:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3.2rem 1.5rem 1.5rem;
+  text-align: center;
+}
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.hero h1 .ital { font-weight: 100; font-style: italic; color: var(--pink); }
+.hero p {
+  color: var(--stone);
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+  letter-spacing: 0.01em;
+}
+
+/* ============================================================
+   POST LIST
+   ============================================================ */
+.wrap { max-width: 760px; margin: 0 auto; padding: 1rem 1.5rem 5rem; }
+
+.state-msg {
+  color: var(--stone);
+  font-size: 0.82rem;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.post-card {
+  border: var(--border);
+  background: var(--paper);
+  margin-bottom: 1.25rem;
+  box-shadow: 4px 4px 0 var(--ink);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.post-card:hover  { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.post-card:active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
+
+.post-card-accent { height: 8px; }
+
+.post-card-body { padding: 1.1rem 1.3rem 1.3rem; }
+
+.post-date {
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 0.4rem;
+}
+
+.post-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+
+.post-excerpt {
+  font-size: 0.85rem;
+  color: #3a362e;
+  line-height: 1.65;
+}
+
+.post-readmore {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   FULL POST VIEW — its own page, not a popup, so it has a
+   real shareable URL (#post/<id>) and back/forward works.
+   ============================================================ */
+#view-post { display: none; }
+
+.post-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2.2rem 1.5rem 5rem;
+}
+
+.post-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  color: var(--stone);
+}
+.post-back:hover { color: var(--ink); }
+
+.post-page-accent { height: 6px; margin-bottom: 1.6rem; }
+
+.post-page-date {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: 0.6rem;
+}
+.post-page-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1.6rem;
+  border-bottom: 2px solid rgba(21,19,15,0.12);
+}
+
+.post-body p { margin-bottom: 1.1rem; font-size: 0.98rem; line-height: 1.8; }
+.post-body h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 1.6rem 0 0.7rem;
+}
+.post-body blockquote {
+  border-left: 3px solid var(--flame);
+  padding-left: 1rem;
+  color: var(--stone);
+  font-style: italic;
+  margin-bottom: 1.1rem;
+}
+.post-body ul { margin: 0 0 1.1rem 1.3rem; }
+.post-body li { margin-bottom: 0.4rem; font-size: 0.98rem; }
+.post-body a { color: var(--sky); text-decoration-color: var(--sky); }
+.post-body strong { font-weight: 700; }
+
+/* photos embedded in a post, via ![caption](url) on its own line */
+.post-body figure {
+  margin: 1.6rem 0;
+  border: 2px solid var(--ink);
+  background: var(--paper-dim);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+.post-body figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.post-body figcaption {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.74rem;
+  color: var(--stone);
+  font-style: italic;
+  border-top: 2px solid var(--ink);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  border-top: var(--border);
+  padding: 1.4rem 1.5rem;
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--stone);
+}
+footer a { color: var(--flame); }
+
+@media (max-width: 560px) {
+  .header-right .btn-secondary span.long { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand" onclick="goHome()">
+    <div class="brand-mark">
+      <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+        <rect width="90" height="90" fill="#FF5722"/>
+        <path d="M14 44 C12 26, 24 12, 43 13 C57 14, 70 9, 76 23 C82 37, 78 57, 69 65 C61 74, 44 80, 31 76 C18 72, 10 65, 14 44 Z" fill="#F7F4EC"/>
+        <path d="M30 14 C35 35, 38 55, 42 76" fill="none" stroke="#FF5722" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M12 50 C30 46, 55 44, 78 46" fill="none" stroke="#FF5722" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="57" cy="36" r="10" fill="#2F9BD6"/>
+        <circle cx="57" cy="36" r="4" fill="#F7F4EC"/>
+        <line x1="57" y1="46" x2="57" y2="56" stroke="#2F9BD6" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="wordmark">
+      <div class="brand-title">open<span class="punct">:</span><span class="ital">grounds</span></div>
+      <div class="brand-sub">blog / updates &amp; stories</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <a class="btn btn-secondary" href="https://opengrounds.github.io/"><span class="long">←&nbsp;</span>all projects</a>
+  </div>
+</header>
+
+<!-- LIST VIEW -->
+<div id="view-list">
+  <div class="hero">
+    <h1>updates <span class="ital">&amp;</span> stories<br>from the commons</h1>
+    <p>news, dispatches, and longer-form writing from open:grounds.</p>
+  </div>
+
+  <div class="wrap">
+    <div id="post-list">
+      <div class="state-msg">loading posts…</div>
+    </div>
+  </div>
+</div>
+
+<!-- FULL POST VIEW — its own page, reached via #post/<id> -->
+<div id="view-post">
+  <div class="post-page">
+    <span class="post-back" onclick="goHome()">← all posts</span>
+    <div class="post-page-accent" id="post-accent"></div>
+    <div class="post-page-date" id="post-date"></div>
+    <h1 class="post-page-title" id="post-title"></h1>
+    <div class="post-body" id="post-body"></div>
+  </div>
+</div>
+
+<footer>
+  made with love in davis, ca &middot; <a href="https://opengrounds.github.io/">open:grounds</a>
+</footer>
+
+<script>
+// ── back4app — same app as the rest of open:grounds, new BlogPost class ──
+const B4A_ID  = 'rIyLxl8dBdYyeGszVuQCldrfXw7jkEL6ZlnzH0Oa';
+const B4A_KEY = 'm64FAAIQEPo5itUwfP1A0lzY3mZRbBJVdqN2HXFX';
+const B4A_URL = 'https://parseapi.back4app.com/classes/BlogPost';
+
+const ACCENTS = {
+  flame: 'var(--flame)', sky: 'var(--sky)', grass: 'var(--grass)',
+  sun: 'var(--sun)', pink: 'var(--pink)', ink: 'var(--ink)'
+};
+
+const DEFAULT_TITLE = document.title;
+let POSTS = [];
+
+async function loadPosts() {
+  try {
+    const res = await fetch(
+      B4A_URL + '?where={"status":"published"}&order=-publishedAt&limit=200',
+      { headers: { 'X-Parse-Application-Id': B4A_ID, 'X-Parse-JavaScript-Key': B4A_KEY } }
+    );
+    const data = await res.json();
+    POSTS = data.results || [];
+    renderList();
+    route(); // handle a direct link straight to a post, e.g. shared as #post/abc123
+  } catch (e) {
+    document.getElementById('post-list').innerHTML =
+      '<div class="state-msg">error</div>';
+  }
+}
+
+function renderList() {
+  const el = document.getElementById('post-list');
+  if (!POSTS.length) {
+    el.innerHTML = '<div class="state-msg">no posts yet — check back soon.</div>';
+    return;
+  }
+  el.innerHTML = POSTS.map((p) => {
+    const accent = ACCENTS[p.accent] || ACCENTS.flame;
+    return `
+      <a class="post-card" href="#post/${p.objectId}">
+        <div class="post-card-accent" style="background:${accent}"></div>
+        <div class="post-card-body">
+          <div class="post-date">${fmtDate(p.publishedAt)}</div>
+          <div class="post-title">${esc(p.title || 'untitled')}</div>
+          <div class="post-excerpt">${esc(p.excerpt || '')}</div>
+          <span class="post-readmore" style="color:${accent}">read more →</span>
+        </div>
+      </a>`;
+  }).join('');
+}
+
+// ── routing — real full-page navigation via the URL hash, no popup ──
+// Reading a post changes the page just like clicking any other link
+// would: the list is swapped out, the post gets its own view and its
+// own shareable URL, and the browser back button takes you home.
+function route() {
+  const hash = window.location.hash; // e.g. "#post/abc123"
+  const match = hash.match(/^#post\/(.+)$/);
+  if (match) {
+    showPost(match[1]);
+  } else {
+    showList();
+  }
+}
+window.addEventListener('hashchange', route);
+
+function goHome() {
+  window.location.hash = '';
+}
+
+function showList() {
+  document.getElementById('view-post').style.display = 'none';
+  document.getElementById('view-list').style.display = 'block';
+  document.title = DEFAULT_TITLE;
+  window.scrollTo(0, 0);
+}
+
+async function showPost(id) {
+  let p = POSTS.find(x => x.objectId === id);
+  if (!p) {
+    // not in the loaded list (e.g. someone opened the link fresh) — fetch it directly
+    try {
+      const res = await fetch(B4A_URL + '/' + id, { headers: { 'X-Parse-Application-Id': B4A_ID, 'X-Parse-JavaScript-Key': B4A_KEY } });
+      if (res.ok) p = await res.json();
+    } catch (e) { /* fall through to not-found */ }
+  }
+
+  document.getElementById('view-list').style.display = 'none';
+  const view = document.getElementById('view-post');
+  view.style.display = 'block';
+  window.scrollTo(0, 0);
+
+  if (!p || p.status !== 'published') {
+    document.getElementById('post-accent').style.background = 'var(--stone)';
+    document.getElementById('post-date').textContent = '';
+    document.getElementById('post-title').textContent = 'post not found';
+    document.getElementById('post-body').innerHTML = '<p>this post may have been moved or unpublished. <a href="#" onclick="goHome()">back to all posts →</a></p>';
+    document.title = DEFAULT_TITLE;
+    return;
+  }
+
+  const accent = ACCENTS[p.accent] || ACCENTS.flame;
+  document.getElementById('post-accent').style.background = accent;
+  document.getElementById('post-date').textContent = fmtDate(p.publishedAt) + (p.author ? ' · ' + p.author : '');
+  document.getElementById('post-title').textContent = p.title || 'untitled';
+  document.getElementById('post-body').innerHTML = renderBody(p.body || '');
+  document.title = (p.title || 'post') + ' — opengrounds blog';
+}
+
+// ── tiny markdown-lite renderer — shared "look" with the admin preview ──
+// supports: blank line = paragraph break, ## heading, > quote, - list item,
+// **bold**, *italic*, [text](url) links, and ![caption](url) photos.
+function renderBody(raw) {
+  const lines = raw.replace(/\r\n/g, '\n').split('\n');
+  let html = '';
+  let inList = false;
+
+  function closeList() { if (inList) { html += '</ul>'; inList = false; } }
+  function inline(s) {
+    s = esc(s);
+    s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    return s;
+  }
+
+  let para = [];
+  function flushPara() {
+    if (para.length) { html += '<p>' + para.map(inline).join(' ') + '</p>'; para = []; }
+  }
+
+  lines.forEach(line => {
+    const t = line.trim();
+    const img = t.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
+    if (!t) { flushPara(); closeList(); return; }
+    if (img) {
+      flushPara(); closeList();
+      const alt = esc(img[1]);
+      const src = esc(img[2]);
+      html += '<figure><img src="' + src + '" alt="' + alt + '" loading="lazy">' +
+              (img[1] ? '<figcaption>' + alt + '</figcaption>' : '') + '</figure>';
+      return;
+    }
+    if (t.startsWith('## ')) { flushPara(); closeList(); html += '<h2>' + inline(t.slice(3)) + '</h2>'; return; }
+    if (t.startsWith('> ')) { flushPara(); closeList(); html += '<blockquote>' + inline(t.slice(2)) + '</blockquote>'; return; }
+    if (t.startsWith('- ')) {
+      flushPara();
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += '<li>' + inline(t.slice(2)) + '</li>';
+      return;
+    }
+    closeList();
+    para.push(t);
+  });
+  flushPara(); closeList();
+  return html;
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  const iso = d.iso || d;
+  const dt = new Date(iso);
+  if (isNaN(dt)) return '';
+  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+loadPosts();
+</script>
+
+</body>
+</html>
